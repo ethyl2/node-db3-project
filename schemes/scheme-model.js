@@ -64,8 +64,16 @@ function add(scheme) {
         })
 }
 
+/* 
+    Expects a changes object and an id.
+    Updates the scheme with the given id.
+    Resolves to the newly updated scheme object.
+*/
 function update(changes, id) {
-
+    return db('schemes').where({ id }).update(changes)
+        .then(() => {
+            return findById(id);
+        })
 }
 
 function remove(id) {
