@@ -76,6 +76,24 @@ function update(changes, id) {
         })
 }
 
+/* 
+    Removes the scheme object with the provided id.
+    Resolves to the removed scheme
+    Resolves to null on an invalid id.
+    (Hint: Only worry about removing the scheme. 
+        The database is configured to automatically remove all associated steps.)
+*/
 function remove(id) {
-
+   
+   return findById(id)
+         .then(response => {
+             if (response === null) {
+                 return null;
+             } else {
+                 return db('schemes').where({ id }).del()
+                    .then(() => {
+                        return response;
+                    })
+             }
+         })
 }
