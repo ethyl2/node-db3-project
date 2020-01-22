@@ -105,10 +105,11 @@ It inserts the new step into the database, correctly linking it to the intended 
 */
 
 function addStep(step, scheme_id) {
+    
     const newStep = {
         scheme_id: scheme_id,
         instructions: step.instructions,
-        step_number: step.step_number
+        step_number: step.step_number || findNextStepNumber(scheme_id)
     }
     return db('steps').insert(newStep)
         .then(ids => {
