@@ -52,8 +52,16 @@ function findSteps(id) {
         .orderBy('step_number');
 }
 
+/* 
+    Expects a scheme object.
+    Inserts scheme into the database.
+    Resolves to the newly inserted scheme, including id.
+*/
 function add(scheme) {
-
+    return db('schemes').insert(scheme)
+        .then(ids => {
+            return findById(ids[0]);
+        })
 }
 
 function update(changes, id) {
