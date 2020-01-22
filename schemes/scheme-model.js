@@ -4,7 +4,8 @@ module.exports = {
     findSteps,
     add,
     update,
-    remove
+    remove,
+    addStep
 }
 
 const db = require('../data/db-config.js');
@@ -48,7 +49,7 @@ function findSteps(id) {
     return db('steps')
         .join('schemes', 'steps.scheme_id', 'schemes.id')
         .where({ 'schemes.id': id})
-        .select('schemes.id', 'schemes.scheme_name', 'steps.id as step_number', 'steps.instructions')
+        .select('steps.id', 'schemes.scheme_name', 'step_number', 'steps.instructions')
         .orderBy('step_number');
 }
 
@@ -96,4 +97,26 @@ function remove(id) {
                     })
              }
          })
+}
+
+/* 
+Stretch: This method expects a step object and a scheme id. 
+It inserts the new step into the database, correctly linking it to the intended scheme.
+*/
+
+function addStep(step, scheme_id) {
+    const newStep = {
+        scheme_id: scheme_id,
+        instructions: step.instructions,
+        step_number: step.step_number
+    }
+    return db('steps').insert(newStep)
+        .then(ids => {
+            console.log(ids);
+            return findStepById(ids[0]);
+        });
+}
+
+function findStepById(id) {
+    return db('steps').where({ id });
 }
